@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import AddressForm from '../components/checkout/AddressForm'
 import { MapPin, Plus, CheckCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { collection, addDoc } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 const Checkout = () => {
     const { cart, cartTotal } = useCart()
@@ -55,6 +57,14 @@ const Checkout = () => {
             finalAddressId = addresses[0].id
         }
 
+        // Validate Razorpay configuration
+        const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID
+        if (!razorpayKey) {
+            toast.error('Payment configuration error. Please contact support.')
+            console.error('Missing VITE_RAZORPAY_KEY_ID in environment variables')
+            return
+        }
+
         const loadScript = (src) => {
             return new Promise((resolve) => {
                 const script = document.createElement('script')
@@ -72,25 +82,44 @@ const Checkout = () => {
             return
         }
 
+        const selectedAddr = addresses.find(a => a.id === finalAddressId)
+
         const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-            amount: cartTotal * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            key: razorpayKey,
+            amount: cartTotal * 100,
             currency: "INR",
             name: "VelcyFashion",
             description: "Transaction",
-            image: "https://velcyfashion.com/logo.png", // You can replace this with your logo URL
-            handler: function (response) {
-                // Payment Success
-                // console.log(response.razorpay_payment_id)
-                // console.log(response.razorpay_order_id)
-                // console.log(response.razorpay_signature)
-                toast.success('Payment Successful!')
-                navigate('/order-confirmation', {
-                    state: {
+            image: "https://velcyfashion.com/logo.png",
+            handler: async function (response) {
+                try {
+                    // Create order in Firestore
+                    const orderData = {
+                        userId: user.uid,
+                        items: cart,
+                        total: cartTotal,
+                        address: selectedAddr,
                         paymentId: response.razorpay_payment_id,
-                        orderId: response.razorpay_order_id
+                        orderId: response.razorpay_order_id,
+                        signature: response.razorpay_signature,
+                        status: 'confirmed',
+                        createdAt: new Date(),
+                        updatedAt: new Date()
                     }
-                })
+
+                    await addDoc(collection(db, 'orders'), orderData)
+                    toast.success('Payment Successful!')
+                    navigate('/order-confirmation', {
+                        state: {
+                            paymentId: response.razorpay_payment_id,
+                            orderId: response.razorpay_order_id,
+                            orderData
+                        }
+                    })
+                } catch (error) {
+                    console.error('Order creation error:', error)
+                    toast.error('Payment successful but order creation failed. Please contact support.')
+                }
             },
             prefill: {
                 name: user?.displayName || 'Customer',
@@ -101,7 +130,7 @@ const Checkout = () => {
                 address: "VelcyFashion Corporate Office"
             },
             theme: {
-                color: "#D4AF37" // Accent color
+                color: "#D4AF37"
             }
         }
 

@@ -1,8 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Facebook, Instagram, Twitter } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 const Footer = () => {
+    const [email, setEmail] = useState('')
+
+    const handleNewsletterSubmit = (e) => {
+        e.preventDefault()
+        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            toast.success('Successfully subscribed to newsletter!')
+            setEmail('')
+        } else {
+            toast.error('Please enter a valid email address')
+        }
+    }
+
     return (
         <footer className="bg-primary text-white pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,20 +62,23 @@ const Footer = () => {
                     <div>
                         <h4 className="text-lg font-semibold mb-6">Stay Updated</h4>
                         <p className="text-gray-400 text-sm mb-4">Subscribe to our newsletter for exclusive offers and updates.</p>
-                        <form className="flex flex-col space-y-3">
+                        <form onSubmit={handleNewsletterSubmit} className="flex flex-col space-y-3">
                             <input
                                 type="email"
                                 placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
                                 className="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:border-accent transition-colors"
                             />
-                            <button className="bg-accent text-primary font-bold py-2 px-4 rounded hover:bg-white transition-colors">
+                            <button type="submit" className="bg-accent text-primary font-bold py-2 px-4 rounded hover:bg-white transition-colors">
                                 Subscribe
                             </button>
                         </form>
                         <div className="flex space-x-4 mt-6">
-                            <a href="#" className="text-gray-400 hover:text-accent transition-colors"><Instagram size={20} /></a>
-                            <a href="#" className="text-gray-400 hover:text-accent transition-colors"><Facebook size={20} /></a>
-                            <a href="#" className="text-gray-400 hover:text-accent transition-colors"><Twitter size={20} /></a>
+                            <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-accent transition-colors"><Instagram size={20} /></a>
+                            <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-accent transition-colors"><Facebook size={20} /></a>
+                            <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-accent transition-colors"><Twitter size={20} /></a>
                         </div>
                     </div>
                 </div>

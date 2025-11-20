@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
 import { Star, Truck, ShieldCheck, Heart, ShoppingBag, Minus, Plus } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 
 // Dummy Data (In a real app, fetch by ID)
 const PRODUCT = {
@@ -30,6 +32,10 @@ const ProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState(0)
     const [quantity, setQuantity] = useState(1)
     const [selectedColor, setSelectedColor] = useState(PRODUCT.colors[0])
+    const { addToCart } = useCart()
+    const { wishlist, addToWishlist, removeFromWishlist } = useWishlist()
+
+    const isInWishlist = wishlist.some(item => item.id === PRODUCT.id)
 
     return (
         <Layout>
@@ -124,11 +130,23 @@ const ProductDetails = () => {
 
                             {/* Actions */}
                             <div className="flex gap-4 mb-8">
-                                <button className="flex-1 bg-accent text-white font-bold py-4 rounded-xl hover:bg-primary transition-colors flex items-center justify-center gap-2 shadow-lg shadow-accent/20">
+                                <button
+                                    onClick={() => addToCart(PRODUCT, quantity, selectedColor)}
+                                    className="flex-1 bg-accent text-white font-bold py-4 rounded-xl hover:bg-primary transition-colors flex items-center justify-center gap-2 shadow-lg shadow-accent/20"
+                                >
                                     <ShoppingBag size={20} /> Add to Cart
                                 </button>
-                                <button className="p-4 border border-gray-200 rounded-xl hover:border-accent hover:text-accent transition-colors">
-                                    <Heart size={24} />
+                                <button
+                                    onClick={() => {
+                                        if (isInWishlist) {
+                                            removeFromWishlist(PRODUCT.id)
+                                        } else {
+                                            addToWishlist(PRODUCT)
+                                        }
+                                    }}
+                                    className="p-4 border border-gray-200 rounded-xl hover:border-accent hover:text-accent transition-colors"
+                                >
+                                    <Heart size={24} fill={isInWishlist ? 'currentColor' : 'none'} />
                                 </button>
                             </div>
 

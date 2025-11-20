@@ -67,28 +67,29 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { title: 'Wedding Edit', image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop' },
-                            { title: 'Festive Glam', image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop' },
-                            { title: 'Casual Chic', image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop' },
+                            { title: 'Wedding Edit', image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop', link: '/shop?category=sarees' },
+                            { title: 'Festive Glam', image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop', link: '/shop?category=sarees' },
+                            { title: 'Casual Chic', image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop', link: '/shop?category=dresses' },
                         ].map((collection, index) => (
-                            <motion.div
-                                key={index}
-                                whileHover={{ y: -10 }}
-                                className="relative h-96 rounded-2xl overflow-hidden group cursor-pointer"
-                            >
-                                <img
-                                    src={collection.image}
-                                    alt={collection.title}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                <div className="absolute bottom-0 left-0 p-8">
-                                    <h3 className="text-2xl font-bold text-white mb-2">{collection.title}</h3>
-                                    <span className="text-accent font-medium flex items-center group-hover:translate-x-2 transition-transform">
-                                        View Collection <ArrowRight className="ml-2" size={16} />
-                                    </span>
-                                </div>
-                            </motion.div>
+                            <Link to={collection.link} key={index}>
+                                <motion.div
+                                    whileHover={{ y: -10 }}
+                                    className="relative h-96 rounded-2xl overflow-hidden group cursor-pointer"
+                                >
+                                    <img
+                                        src={collection.image}
+                                        alt={collection.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                    <div className="absolute bottom-0 left-0 p-8">
+                                        <h3 className="text-2xl font-bold text-white mb-2">{collection.title}</h3>
+                                        <span className="text-accent font-medium flex items-center group-hover:translate-x-2 transition-transform">
+                                            View Collection <ArrowRight className="ml-2" size={16} />
+                                        </span>
+                                    </div>
+                                </motion.div>
+                            </Link>
                         ))}
                     </div>
                 </div>

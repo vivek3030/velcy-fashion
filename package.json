@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/dompurify": "^3.0.5",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "dompurify": "^3.3.0",
     "firebase": "^10.12.0",
     "framer-motion": "^11.2.0",
     "lucide-react": "^0.378.0",
@@ -23,6 +25,7 @@
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",

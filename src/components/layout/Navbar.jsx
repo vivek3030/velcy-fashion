@@ -78,15 +78,15 @@ const Navbar = () => {
                         className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
                     >
                         <div className="px-4 pt-2 pb-6 space-y-2">
-                            <Link to="/" className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Home</Link>
-                            <Link to="/shop?category=sarees" className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Sarees</Link>
-                            <Link to="/shop?category=dresses" className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Dresses</Link>
-                            <Link to="/about" className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Our Story</Link>
+                            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Home</Link>
+                            <Link to="/shop?category=sarees" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Sarees</Link>
+                            <Link to="/shop?category=dresses" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Dresses</Link>
+                            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Our Story</Link>
                             <div className="border-t border-gray-100 pt-4 mt-4 flex space-x-6 px-3">
-                                <Link to="/profile" className="flex items-center text-primary hover:text-accent">
+                                <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-primary hover:text-accent">
                                     <User size={20} className="mr-2" /> Profile
                                 </Link>
-                                <button onClick={() => setIsCartOpen(true)} className="flex items-center text-primary hover:text-accent w-full text-left">
+                                <button onClick={() => { setIsMobileMenuOpen(false); setIsCartOpen(true); }} className="flex items-center text-primary hover:text-accent w-full text-left">
                                     <ShoppingBag size={20} className="mr-2" /> Cart ({cartCount})
                                 </button>
                             </div>

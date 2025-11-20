@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
 
 const CartContext = createContext()
@@ -50,8 +50,14 @@ export const CartProvider = ({ children }) => {
         setCart([])
     }
 
-    const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0)
-    const cartCount = cart.reduce((count, item) => count + item.quantity, 0)
+    // Memoized cart calculations for performance
+    const cartCount = useMemo(() => {
+        return cart.reduce((total, item) => total + item.quantity, 0)
+    }, [cart])
+
+    const cartTotal = useMemo(() => {
+        return cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+    }, [cart])
 
     return (
         <CartContext.Provider value={{

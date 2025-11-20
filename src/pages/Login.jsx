@@ -8,7 +8,7 @@ const Login = () => {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [otp, setOtp] = useState('')
     const [step, setStep] = useState('PHONE') // PHONE or OTP
-    const { sendOtp, verifyOtp, mockLogin, user } = useAuth()
+    const { sendOtp, verifyOtp, mockLogin, user, otpCooldown } = useAuth()
     const navigate = useNavigate()
 
     // Redirect if already logged in
@@ -75,10 +75,14 @@ const Login = () => {
                             <div>
                                 <button
                                     type="submit"
-                                    className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-accent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+                                    disabled={otpCooldown > 0}
+                                    className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${otpCooldown > 0
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-primary hover:bg-accent'
+                                        }`}
                                 >
-                                    Send OTP
-                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                    {otpCooldown > 0 ? `Wait ${otpCooldown}s` : 'Send OTP'}
+                                    {otpCooldown === 0 && <ArrowRight className="ml-2 h-4 w-4" />}
                                 </button>
                             </div>
                             <div id="recaptcha-container"></div>
@@ -115,9 +119,14 @@ const Login = () => {
                                 </button>
                                 <button
                                     type="button"
-                                    className="text-sm text-gray-500 hover:text-primary"
+                                    onClick={handleSendOtp}
+                                    disabled={otpCooldown > 0}
+                                    className={`text-sm ${otpCooldown > 0
+                                            ? 'text-gray-400 cursor-not-allowed'
+                                            : 'text-gray-500 hover:text-primary cursor-pointer'
+                                        }`}
                                 >
-                                    Resend OTP
+                                    {otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend OTP'}
                                 </button>
                             </div>
 

@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [confirmationResult, setConfirmationResult] = useState(null)
+    const [recaptchaVerifier, setRecaptchaVerifier] = useState(null)
+    const [otpCooldown, setOtpCooldown] = useState(0)
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -29,26 +31,53 @@ export const AuthProvider = ({ children }) => {
             setLoading(false)
         })
 
-        return () => unsubscribe()
-    }, [])
+        return () => {
+            unsubscribe()
+            // Cleanup RecaptchaVerifier on unmount
+            if (recaptchaVerifier) {
+                recaptchaVerifier.clear()
+            }
+        }
+    }, [recaptchaVerifier])
 
     const setupRecaptcha = (elementId) => {
-        if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, elementId, {
+        if (!recaptchaVerifier) {
+            const verifier = new RecaptchaVerifier(auth, elementId, {
                 'size': 'invisible',
                 'callback': (response) => {
-                    // reCAPTCHA solved, allow signInWithPhoneNumber.
+                    // reCAPTCHA solved
                 }
-            });
+            })
+            setRecaptchaVerifier(verifier)
+            return verifier
         }
+        return recaptchaVerifier
     }
 
     const sendOtp = async (phoneNumber) => {
+        // Rate limiting: Check if cooldown is active
+        if (otpCooldown > 0) {
+            toast.error(`Please wait ${otpCooldown} seconds before requesting another OTP`)
+            return false
+        }
+
         try {
-            setupRecaptcha('recaptcha-container')
-            const appVerifier = window.recaptchaVerifier
+            const appVerifier = setupRecaptcha('recaptcha-container')
             const confirmation = await signInWithPhoneNumber(auth, phoneNumber, appVerifier)
             setConfirmationResult(confirmation)
+
+            // Set 60 second cooldown
+            setOtpCooldown(60)
+            const interval = setInterval(() => {
+                setOtpCooldown((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(interval)
+                        return 0
+                    }
+                    return prev - 1
+                })
+            }, 1000)
+
             toast.success('OTP sent successfully!')
             return true
         } catch (error) {
@@ -94,8 +123,14 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    // MOCK LOGIN FOR DEVELOPMENT (Since we don't have real Firebase keys yet)
+    // MOCK LOGIN FOR DEVELOPMENT ONLY
     const mockLogin = (phoneNumber) => {
+        // Only allow mock login in development
+        if (import.meta.env.MODE !== 'development') {
+            toast.error('Mock login is not available in production')
+            return
+        }
+
         const mockUser = {
             uid: 'mock-user-123',
             phoneNumber: phoneNumber,
@@ -103,11 +138,11 @@ export const AuthProvider = ({ children }) => {
             role: 'user'
         }
         setUser(mockUser)
-        toast.success('Mock Login Successful')
+        toast.success('Mock Login Successful (Development Only)')
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, sendOtp, verifyOtp, logout, mockLogin }}>
+        <AuthContext.Provider value={{ user, loading, sendOtp, verifyOtp, logout, mockLogin, otpCooldown }}>
             {children}
         </AuthContext.Provider>
     )

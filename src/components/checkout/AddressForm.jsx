@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { sanitizeInput } from '../../utils/sanitize'
 
 const AddressForm = ({ onSave, onCancel, initialData = {} }) => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const AddressForm = ({ onSave, onCancel, initialData = {} }) => {
         landmark: initialData.landmark || '',
         isDefault: initialData.isDefault || false
     })
+    const [errors, setErrors] = useState({})
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -18,11 +20,47 @@ const AddressForm = ({ onSave, onCancel, initialData = {} }) => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }))
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }))
+        }
+    }
+
+    const validateForm = () => {
+        const newErrors = {}
+
+        // Validate mobile number (10 digits)
+        const mobileRegex = /^[0-9]{10}$/
+        if (!mobileRegex.test(formData.mobile)) {
+            newErrors.mobile = 'Mobile number must be 10 digits'
+        }
+
+        // Validate PIN code (6 digits)
+        const pincodeRegex = /^[0-9]{6}$/
+        if (!pincodeRegex.test(formData.pincode)) {
+            newErrors.pincode = 'PIN code must be 6 digits'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        onSave(formData)
+        if (validateForm()) {
+            // Sanitize all inputs before saving
+            const sanitizedData = {
+                ...formData,
+                name: sanitizeInput(formData.name),
+                mobile: sanitizeInput(formData.mobile),
+                pincode: sanitizeInput(formData.pincode),
+                address: sanitizeInput(formData.address),
+                city: sanitizeInput(formData.city),
+                state: sanitizeInput(formData.state),
+                landmark: sanitizeInput(formData.landmark)
+            }
+            onSave(sanitizedData)
+        }
     }
 
     return (
@@ -43,9 +81,12 @@ const AddressForm = ({ onSave, onCancel, initialData = {} }) => {
                     placeholder="Mobile Number"
                     value={formData.mobile}
                     onChange={handleChange}
+                    pattern="[0-9]{10}"
+                    maxLength="10"
                     required
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-accent"
+                    className={`w-full p-3 border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:border-accent`}
                 />
+                {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
@@ -54,9 +95,12 @@ const AddressForm = ({ onSave, onCancel, initialData = {} }) => {
                     placeholder="PIN Code"
                     value={formData.pincode}
                     onChange={handleChange}
+                    pattern="[0-9]{6}"
+                    maxLength="6"
                     required
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-accent"
+                    className={`w-full p-3 border ${errors.pincode ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:border-accent`}
                 />
+                {errors.pincode && <p className="text-red-500 text-sm mt-1">{errors.pincode}</p>}
                 <input
                     type="text"
                     name="city"

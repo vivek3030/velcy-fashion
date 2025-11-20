@@ -1,13 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { Package, MapPin, LogOut, User as UserIcon } from 'lucide-react'
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 const Profile = () => {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('orders')
+    const [orders, setOrders] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (user) {
+            loadOrders()
+        }
+    }, [user])
+
+    const loadOrders = async () => {
+        try {
+            const ordersQuery = query(
+                collection(db, 'orders'),
+                where('userId', '==', user.uid),
+                orderBy('createdAt', 'desc')
+            )
+            const querySnapshot = await getDocs(ordersQuery)
+            const loadedOrders = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            setOrders(loadedOrders)
+        } catch (error) {
+            console.error('Error loading orders:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     if (!user) {
         navigate('/login')
@@ -64,37 +94,56 @@ const Profile = () => {
                         <div className="p-8">
                             {activeTab === 'orders' ? (
                                 <div className="space-y-6">
-                                    {[1, 2].map((order) => (
-                                        <div key={order} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
-                                            <div className="flex flex-col md:flex-row justify-between mb-4">
-                                                <div>
-                                                    <p className="font-bold text-lg">Order #VF{12345 + order}</p>
-                                                    <p className="text-sm text-gray-500">Placed on {new Date().toLocaleDateString()}</p>
-                                                </div>
-                                                <div className="mt-2 md:mt-0">
-                                                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">
-                                                        Delivered
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-4 mb-4">
-                                                <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden">
-                                                    <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop" alt="Product" className="w-full h-full object-cover" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-medium">Kanjivaram Silk Saree</p>
-                                                    <p className="text-sm text-gray-500">Qty: 1</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                                                <p className="font-bold">Total: ₹12,999</p>
-                                                <button className="text-accent font-bold hover:underline">View Details</button>
-                                            </div>
+                                    {loading ? (
+                                        <div className="text-center py-12">
+                                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+                                            <p className="text-gray-500 mt-4">Loading orders...</p>
                                         </div>
-                                    ))}
-                                    <div className="text-center pt-4">
-                                        <button onClick={() => navigate('/shop')} className="text-accent font-bold hover:underline">Continue Shopping</button>
-                                    </div>
+                                    ) : orders.length > 0 ? (
+                                        orders.map((order) => (
+                                            <div key={order.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                                                <div className="flex flex-col md:flex-row justify-between mb-4">
+                                                    <div>
+                                                        <p className="font-bold text-lg">Order #{order.orderId || order.id.substring(0, 8).toUpperCase()}</p>
+                                                        <p className="text-sm text-gray-500">{order.createdAt?.toDate?.().toLocaleDateString() || 'Recent'}</p>
+                                                    </div>
+                                                    <div className="mt-2 md:mt-0">
+                                                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">
+                                                            {order.status || 'Confirmed'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-3">
+                                                    {order.items?.slice(0, 2).map((item, idx) => (
+                                                        <div key={idx} className="flex items-center gap-4">
+                                                            <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden">
+                                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-medium">{item.name}</p>
+                                                                <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-4">
+                                                    <p className="font-bold">Total: ₹{order.total?.toLocaleString()}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-16">
+                                            <Package size={64} className="mx-auto mb-4 text-gray-300" />
+                                            <p className="text-xl font-medium text-gray-600 mb-2">No orders yet</p>
+                                            <p className="text-gray-500 mb-6">Start shopping to see your orders here</p>
+                                            <button
+                                                onClick={() => navigate('/shop')}
+                                                className="bg-accent text-white px-8 py-3 rounded-lg font-bold hover:bg-primary transition-colors"
+                                            >
+                                                Start Shopping
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="text-center py-12 text-gray-500">

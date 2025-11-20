@@ -107,6 +107,7 @@ const CartDrawer = () => {
                                     to="/checkout"
                                     onClick={() => setIsCartOpen(false)}
                                     className="block w-full bg-primary text-white font-bold py-4 rounded-xl text-center hover:bg-accent transition-colors"
+                                    data-testid="checkout-link"
                                 >
                                     Checkout
                                 </Link>

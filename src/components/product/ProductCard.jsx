@@ -2,8 +2,35 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, ShoppingBag } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
+import toast from 'react-hot-toast'
 
 const ProductCard = ({ product }) => {
+    const { addToCart } = useCart()
+    const { wishlist, addToWishlist, removeFromWishlist } = useWishlist()
+
+    const isInWishlist = wishlist.some(item => item.id === product.id)
+
+    const handleQuickAdd = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        addToCart(product, 1, product.colors ? product.colors[0] : null)
+        toast.success('Added to cart!')
+    }
+
+    const handleWishlist = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (isInWishlist) {
+            removeFromWishlist(product.id)
+            toast.success('Removed from wishlist')
+        } else {
+            addToWishlist(product)
+            toast.success('Added to wishlist!')
+        }
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -22,10 +49,18 @@ const ProductCard = ({ product }) => {
 
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <button className="bg-white p-3 rounded-full text-primary hover:text-accent hover:scale-110 transition-all shadow-lg" title="Add to Wishlist">
-                        <Heart size={20} />
+                    <button
+                        onClick={handleWishlist}
+                        className="bg-white p-3 rounded-full text-primary hover:text-accent hover:scale-110 transition-all shadow-lg"
+                        title="Add to Wishlist"
+                    >
+                        <Heart size={20} fill={isInWishlist ? 'currentColor' : 'none'} />
                     </button>
-                    <button className="bg-accent p-3 rounded-full text-white hover:bg-white hover:text-accent hover:scale-110 transition-all shadow-lg" title="Quick Add">
+                    <button
+                        onClick={handleQuickAdd}
+                        className="bg-accent p-3 rounded-full text-white hover:bg-white hover:text-accent hover:scale-110 transition-all shadow-lg"
+                        title="Quick Add"
+                    >
                         <ShoppingBag size={20} />
                     </button>
                 </div>
