@@ -11,12 +11,24 @@ test.describe('Shop Page', () => {
     });
 
     test('should filter by category', async ({ page }) => {
-        // Click on 'Sarees' filter
-        await page.getByLabel('Sarees').check();
+        // 1. Open filters on mobile if needed
+        const filterBtn = page.getByTestId('filter-button');
+        if (await filterBtn.isVisible()) {
+            await filterBtn.click();
+        }
 
-        // Verify URL or content update
-        // Note: Since we use local state dummy data, we check if the filter is checked
-        await expect(page.getByLabel('Sarees')).toBeChecked();
+        // 2. Click on 'Sarees' filter
+        // Ensure sidebar is visible before clicking
+        const sareeCheckbox = page.getByLabel('Saree', { exact: true }); // Assuming label text matches exactly
+        // Or if label text is "Saree", your component uses 'Saree' in map loop but label says 'Sarees' in earlier text?
+        // The code says `['All', 'Saree', 'Dress'...]`, so label is "Saree"
+
+        // Wait for the checkbox to be actionable
+        await expect(sareeCheckbox).toBeVisible();
+        await sareeCheckbox.check();
+
+        // 3. Verify URL or content update
+        await expect(sareeCheckbox).toBeChecked();
     });
 
     test('should navigate to product details', async ({ page }) => {

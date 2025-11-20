@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { X, Upload, Plus } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 const ProductForm = ({ onClose, onSave, initialData = {} }) => {
+    // ... existing state initialization ...
     const [formData, setFormData] = useState({
         name: initialData.name || '',
         category: initialData.category || 'saree',
@@ -19,9 +21,14 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target
+        // Prevent negative numbers for price and stock
+        if ((name === 'price' || name === 'stock' || name === 'salePrice') && value < 0) {
+            return
+        }
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
+    // ... existing handleAddColor, handleAddImage ...
     const handleAddColor = () => {
         if (newColor && !formData.colors.includes(newColor)) {
             setFormData(prev => ({ ...prev, colors: [...prev.colors, newColor] }))
@@ -38,12 +45,23 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (Number(formData.price) <= 0) {
+            toast.error('Price must be greater than 0')
+            return
+        }
+        if (Number(formData.stock) < 0) {
+            toast.error('Stock cannot be negative')
+            return
+        }
         onSave(formData)
     }
 
+    // ... return JSX (same as before, just ensure handleSubmit is used) ...
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            {/* ... existing JSX structure ... */}
             <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                {/* ... header ... */}
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                     <h2 className="text-xl font-bold">{initialData.id ? 'Edit Product' : 'Add New Product'}</h2>
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
@@ -52,6 +70,7 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                    {/* ... inputs ... */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
@@ -78,12 +97,14 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                         </div>
                     </div>
 
+                    {/* Price & Stock */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
                             <input
                                 type="number"
                                 name="price"
+                                min="0"
                                 value={formData.price}
                                 onChange={handleChange}
                                 required
@@ -95,6 +116,7 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                             <input
                                 type="number"
                                 name="salePrice"
+                                min="0"
                                 value={formData.salePrice}
                                 onChange={handleChange}
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-accent"
@@ -105,6 +127,7 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                             <input
                                 type="number"
                                 name="stock"
+                                min="0"
                                 value={formData.stock}
                                 onChange={handleChange}
                                 required
@@ -113,6 +136,7 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                         </div>
                     </div>
 
+                    {/* ... rest of the form (Description, Fabric, Colors, Images, Buttons) ... */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea

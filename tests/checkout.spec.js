@@ -7,20 +7,24 @@ test.describe('Checkout Flow', () => {
         // 1. Go to Shop
         await page.goto('/shop');
 
-        // 2. Click on a product
-        await page.getByText('Kanjivaram Silk Saree').first().click();
+        // 2. Click on a product (wait for it to be visible)
+        const productLink = page.getByText('Kanjivaram Silk Saree').first();
+        await expect(productLink).toBeVisible({ timeout: 10000 });
+        await productLink.click();
         await expect(page).toHaveURL(/.*product/);
 
         // 3. Add to Cart
         await page.getByRole('button', { name: 'Add to Cart' }).click();
 
         // 4. Wait for cart drawer to open (AddToCart automatically opens it)
-        await page.waitForSelector('[data-testid="checkout-link"]', { state: 'visible', timeout: 5000 });
+        // Use the new test id for reliability
+        const checkoutLink = page.getByTestId('checkout-link');
+        await expect(checkoutLink).toBeVisible({ timeout: 5000 });
 
         // 5. Click Checkout
-        await page.getByTestId('checkout-link').click();
+        await checkoutLink.click();
 
-        // 6. Should redirect to Login if not authenticated
-        await expect(page).toHaveURL(/.*checkout|.*login/);
+        // 6. Should redirect to Login if not authenticated (assuming test starts unauthenticated)
+        await expect(page).toHaveURL(/.*login/);
     });
 });

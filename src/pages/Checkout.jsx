@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
@@ -11,7 +11,7 @@ import { db } from '../lib/firebase'
 
 const Checkout = () => {
     const { cart, cartTotal } = useCart()
-    const { user } = useAuth()
+    const { user, loading } = useAuth()
     const navigate = useNavigate()
     const [showAddressForm, setShowAddressForm] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState(null)
@@ -29,14 +29,18 @@ const Checkout = () => {
         }
     ])
 
-    if (cart.length === 0) {
-        navigate('/shop')
-        return null
-    }
+    useEffect(() => {
+        if (!loading) {
+            if (cart.length === 0) {
+                navigate('/shop')
+            } else if (!user) {
+                navigate('/login')
+            }
+        }
+    }, [cart, user, loading, navigate])
 
-    if (!user) {
-        navigate('/login')
-        return null
+    if (loading || cart.length === 0 || !user) {
+        return null // Or a loading spinner
     }
 
     const handleAddAddress = (newAddress) => {

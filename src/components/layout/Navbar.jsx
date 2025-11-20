@@ -45,6 +45,8 @@ const Navbar = () => {
                         </Link>
                         <button
                             onClick={() => setIsCartOpen(true)}
+                            data-testid="cart-button"
+                            aria-label="Cart"
                             className={`relative transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}
                         >
                             <ShoppingBag size={20} />

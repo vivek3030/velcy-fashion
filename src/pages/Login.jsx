@@ -19,7 +19,13 @@ const Login = () => {
 
     const handleSendOtp = async (e) => {
         e.preventDefault()
-        if (phoneNumber.length < 10) return
+        // Basic validation for 10-digit number or formatted +91
+        const phoneRegex = /^(\+91)?[6-9]\d{9}$/
+        if (!phoneRegex.test(phoneNumber)) {
+            // In a real app, show a toast error here
+            alert("Please enter a valid valid Indian mobile number (e.g., 9999999999)")
+            return
+        }
 
         // For development/demo purposes, we'll use the mock login if the number is a specific test number
         if (phoneNumber === '9999999999') {
@@ -37,7 +43,7 @@ const Login = () => {
         const success = await verifyOtp(otp)
         if (success) navigate('/profile')
     }
-
+    // ... rest of the component remains the same
     return (
         <Layout>
             <div className="min-h-[70vh] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -77,8 +83,8 @@ const Login = () => {
                                     type="submit"
                                     disabled={otpCooldown > 0}
                                     className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${otpCooldown > 0
-                                            ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-primary hover:bg-accent'
+                                        ? 'bg-gray-400 cursor-not-allowed'
+                                        : 'bg-primary hover:bg-accent'
                                         }`}
                                 >
                                     {otpCooldown > 0 ? `Wait ${otpCooldown}s` : 'Send OTP'}
@@ -122,8 +128,8 @@ const Login = () => {
                                     onClick={handleSendOtp}
                                     disabled={otpCooldown > 0}
                                     className={`text-sm ${otpCooldown > 0
-                                            ? 'text-gray-400 cursor-not-allowed'
-                                            : 'text-gray-500 hover:text-primary cursor-pointer'
+                                        ? 'text-gray-400 cursor-not-allowed'
+                                        : 'text-gray-500 hover:text-primary cursor-pointer'
                                         }`}
                                 >
                                     {otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend OTP'}
