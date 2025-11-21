@@ -8,6 +8,7 @@ const Login = () => {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [otp, setOtp] = useState('')
     const [step, setStep] = useState('PHONE') // PHONE or OTP
+    const [sending, setSending] = useState(false)
     const { sendOtp, verifyOtp, mockLogin, user, otpCooldown } = useAuth()
     const navigate = useNavigate()
 
@@ -19,6 +20,8 @@ const Login = () => {
 
     const handleSendOtp = async (e) => {
         e.preventDefault()
+        if (sending || otpCooldown > 0) return // Prevent duplicate requests
+
         // Basic validation for 10-digit number or formatted +91
         const phoneRegex = /^(\+91)?[6-9]\d{9}$/
         if (!phoneRegex.test(phoneNumber)) {
@@ -27,14 +30,20 @@ const Login = () => {
             return
         }
 
-        // For development/demo purposes, we'll use the mock login if the number is a specific test number
-        if (phoneNumber === '9999999999') {
-            mockLogin('+919999999999')
+        // For development/demo purposes, we'll use the mock login for test numbers
+        if (phoneNumber === '9999999999' || phoneNumber === '9999990000') {
+            setSending(true)
+            const formattedNumber = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
+            await mockLogin(formattedNumber)
+            navigate(phoneNumber === '9999990000' ? '/admin' : '/profile')
+            setSending(false)
             return
         }
 
+        setSending(true)
         const formattedNumber = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`
         const success = await sendOtp(formattedNumber)
+        setSending(false)
         if (success) setStep('OTP')
     }
 
@@ -43,7 +52,7 @@ const Login = () => {
         const success = await verifyOtp(otp)
         if (success) navigate('/profile')
     }
-    // ... rest of the component remains the same
+
     return (
         <Layout>
             <div className="min-h-[70vh] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -81,20 +90,22 @@ const Login = () => {
                             <div>
                                 <button
                                     type="submit"
-                                    disabled={otpCooldown > 0}
-                                    className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${otpCooldown > 0
+                                    disabled={otpCooldown > 0 || sending}
+                                    className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${otpCooldown > 0 || sending
                                         ? 'bg-gray-400 cursor-not-allowed'
                                         : 'bg-primary hover:bg-accent'
                                         }`}
                                 >
-                                    {otpCooldown > 0 ? `Wait ${otpCooldown}s` : 'Send OTP'}
-                                    {otpCooldown === 0 && <ArrowRight className="ml-2 h-4 w-4" />}
+                                    {sending ? 'Sending...' : otpCooldown > 0 ? `Wait ${otpCooldown}s` : 'Send OTP'}
+                                    {otpCooldown === 0 && !sending && <ArrowRight className="ml-2 h-4 w-4" />}
                                 </button>
                             </div>
                             <div id="recaptcha-container"></div>
 
-                            <div className="text-center text-xs text-gray-400 mt-4">
-                                <p>For demo, use <strong>9999999999</strong> to skip OTP.</p>
+                            <div className="text-center text-xs text-gray-400 mt-4 space-y-1">
+                                <p>For demo:</p>
+                                <p><strong>9999999999</strong> → User login</p>
+                                <p><strong>9999990000</strong> → Admin login</p>
                             </div>
                         </form>
                     ) : (
@@ -126,13 +137,13 @@ const Login = () => {
                                 <button
                                     type="button"
                                     onClick={handleSendOtp}
-                                    disabled={otpCooldown > 0}
-                                    className={`text-sm ${otpCooldown > 0
+                                    disabled={otpCooldown > 0 || sending}
+                                    className={`text-sm ${otpCooldown > 0 || sending
                                         ? 'text-gray-400 cursor-not-allowed'
                                         : 'text-gray-500 hover:text-primary cursor-pointer'
                                         }`}
                                 >
-                                    {otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend OTP'}
+                                    {sending ? 'Sending...' : otpCooldown > 0 ? `Resend in ${otpCooldown}s` : 'Resend OTP'}
                                 </button>
                             </div>
 

@@ -1,7 +1,8 @@
 export const products = [
+    // SAREES (20 Items)
     {
         id: 1,
-        name: 'Kanjivaram Silk Saree',
+        name: 'Royal Kanjivaram Silk Saree',
         category: 'Saree',
         fabric: 'Silk',
         price: 12999,
@@ -10,8 +11,7 @@ export const products = [
         image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
         images: [
             'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop'
         ],
         description: 'Exquisite Kanjivaram silk saree with intricate zari work. Perfect for weddings and special occasions.',
         isNew: true,
@@ -23,27 +23,6 @@ export const products = [
     },
     {
         id: 2,
-        name: 'Floral Georgette Dress',
-        category: 'Dress',
-        fabric: 'Georgette',
-        price: 4599,
-        originalPrice: null,
-        discount: null,
-        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
-        images: [
-            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
-        ],
-        description: 'Lightweight and breezy floral georgette dress, perfect for casual outings.',
-        isNew: false,
-        colors: ['#FFC0CB', '#FFFFFF'],
-        rating: 4.5,
-        reviews: 85,
-        care: 'Machine Wash',
-        delivery: '3-5 Business Days'
-    },
-    {
-        id: 3,
         name: 'Banarasi Silk Saree',
         category: 'Saree',
         fabric: 'Silk',
@@ -53,7 +32,7 @@ export const products = [
         image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
         images: [
             'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop'
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
         ],
         description: 'Traditional Banarasi silk saree with rich texture and elegance.',
         isNew: false,
@@ -64,8 +43,409 @@ export const products = [
         delivery: '4-6 Business Days'
     },
     {
+        id: 3,
+        name: 'Georgette Floral Saree',
+        category: 'Saree',
+        fabric: 'Georgette',
+        price: 3499,
+        originalPrice: 4999,
+        discount: 30,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Lightweight georgette saree with beautiful floral prints.',
+        isNew: true,
+        colors: ['#FFC0CB', '#FFFFFF'],
+        rating: 4.5,
+        reviews: 45,
+        care: 'Hand Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
         id: 4,
-        name: 'Embroidered Anarkali',
+        name: 'Chiffon Party Wear Saree',
+        category: 'Saree',
+        fabric: 'Chiffon',
+        price: 4299,
+        originalPrice: 5999,
+        discount: 28,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Elegant chiffon saree perfect for evening parties.',
+        isNew: false,
+        colors: ['#000000', '#FF0000'],
+        rating: 4.6,
+        reviews: 67,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 5,
+        name: 'Cotton Handloom Saree',
+        category: 'Saree',
+        fabric: 'Cotton',
+        price: 2499,
+        originalPrice: 3499,
+        discount: 29,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Comfortable cotton handloom saree for daily wear.',
+        isNew: true,
+        colors: ['#FFFFFF', '#0000FF'],
+        rating: 4.4,
+        reviews: 89,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 6,
+        name: 'Mysore Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 6999,
+        originalPrice: 8999,
+        discount: 22,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Classic Mysore silk saree known for its soft texture.',
+        isNew: false,
+        colors: ['#800080', '#FFD700'],
+        rating: 4.7,
+        reviews: 112,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 7,
+        name: 'Organza Embroidered Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 5499,
+        originalPrice: 7499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Sheer organza saree with delicate embroidery.',
+        isNew: true,
+        colors: ['#FFC0CB', '#E6E6FA'],
+        rating: 4.6,
+        reviews: 56,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 8,
+        name: 'Tussar Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 7999,
+        originalPrice: 9999,
+        discount: 20,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Rich Tussar silk saree with natural gold sheen.',
+        isNew: false,
+        colors: ['#D2B48C', '#8B4513'],
+        rating: 4.8,
+        reviews: 78,
+        care: 'Dry Clean Only',
+        delivery: '4-6 Business Days'
+    },
+    {
+        id: 9,
+        name: 'Linen Printed Saree',
+        category: 'Saree',
+        fabric: 'Cotton',
+        price: 2999,
+        originalPrice: 3999,
+        discount: 25,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Breathable linen saree with modern prints.',
+        isNew: true,
+        colors: ['#87CEEB', '#FFFFFF'],
+        rating: 4.5,
+        reviews: 95,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 10,
+        name: 'Satin Crepe Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 3999,
+        originalPrice: 5499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Smooth satin crepe saree that drapes beautifully.',
+        isNew: false,
+        colors: ['#FF00FF', '#000000'],
+        rating: 4.6,
+        reviews: 62,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 11,
+        name: 'Paithani Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 15999,
+        originalPrice: 19999,
+        discount: 20,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Luxurious Paithani silk saree with peacock motifs.',
+        isNew: true,
+        colors: ['#800080', '#FFD700'],
+        rating: 4.9,
+        reviews: 150,
+        care: 'Dry Clean Only',
+        delivery: '5-7 Business Days'
+    },
+    {
+        id: 12,
+        name: 'Chanderi Cotton Saree',
+        category: 'Saree',
+        fabric: 'Cotton',
+        price: 3299,
+        originalPrice: 4299,
+        discount: 23,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Lightweight Chanderi cotton saree with zari border.',
+        isNew: false,
+        colors: ['#FFFF00', '#008000'],
+        rating: 4.5,
+        reviews: 88,
+        care: 'Hand Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 13,
+        name: 'Bandhani Georgette Saree',
+        category: 'Saree',
+        fabric: 'Georgette',
+        price: 4599,
+        originalPrice: 5999,
+        discount: 23,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Vibrant Bandhani print on georgette fabric.',
+        isNew: true,
+        colors: ['#FF0000', '#FFFF00'],
+        rating: 4.7,
+        reviews: 105,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 14,
+        name: 'Kalamkari Cotton Saree',
+        category: 'Saree',
+        fabric: 'Cotton',
+        price: 2799,
+        originalPrice: 3799,
+        discount: 26,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Artistic Kalamkari prints on soft cotton.',
+        isNew: false,
+        colors: ['#8B4513', '#F5DEB3'],
+        rating: 4.6,
+        reviews: 72,
+        care: 'Hand Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 15,
+        name: 'Net Designer Saree',
+        category: 'Saree',
+        fabric: 'Georgette',
+        price: 5999,
+        originalPrice: 7999,
+        discount: 25,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Stylish net saree with stone work for parties.',
+        isNew: true,
+        colors: ['#000000', '#C0C0C0'],
+        rating: 4.5,
+        reviews: 48,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 16,
+        name: 'Patola Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 18999,
+        originalPrice: 24999,
+        discount: 24,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Heritage Patola silk saree with double ikat weave.',
+        isNew: false,
+        colors: ['#FF0000', '#008000'],
+        rating: 5.0,
+        reviews: 35,
+        care: 'Dry Clean Only',
+        delivery: '5-7 Business Days'
+    },
+    {
+        id: 17,
+        name: 'Uppada Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 9499,
+        originalPrice: 11999,
+        discount: 21,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Lightweight Uppada silk saree with jamdani work.',
+        isNew: true,
+        colors: ['#FFD700', '#FF69B4'],
+        rating: 4.7,
+        reviews: 65,
+        care: 'Dry Clean Only',
+        delivery: '4-6 Business Days'
+    },
+    {
+        id: 18,
+        name: 'Kota Doria Saree',
+        category: 'Saree',
+        fabric: 'Cotton',
+        price: 1999,
+        originalPrice: 2999,
+        discount: 33,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Airy Kota Doria saree, perfect for summer.',
+        isNew: false,
+        colors: ['#FFFFFF', '#87CEEB'],
+        rating: 4.4,
+        reviews: 82,
+        care: 'Hand Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 19,
+        name: 'Raw Silk Saree',
+        category: 'Saree',
+        fabric: 'Silk',
+        price: 7499,
+        originalPrice: 9499,
+        discount: 21,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Textured raw silk saree in earthy tones.',
+        isNew: true,
+        colors: ['#8B4513', '#556B2F'],
+        rating: 4.6,
+        reviews: 58,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 20,
+        name: 'Bollywood Replica Saree',
+        category: 'Saree',
+        fabric: 'Georgette',
+        price: 4999,
+        originalPrice: 6999,
+        discount: 29,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Trendy Bollywood style saree for fashionistas.',
+        isNew: false,
+        colors: ['#FF0000', '#000000'],
+        rating: 4.5,
+        reviews: 120,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+
+    // DRESSES (20 Items)
+    {
+        id: 21,
+        name: 'Floral Georgette Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 4599,
+        originalPrice: 5999,
+        discount: 23,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Lightweight and breezy floral georgette dress.',
+        isNew: true,
+        colors: ['#FFC0CB', '#FFFFFF'],
+        rating: 4.5,
+        reviews: 85,
+        care: 'Machine Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 22,
+        name: 'Embroidered Anarkali Suit',
         category: 'Dress',
         fabric: 'Silk',
         price: 6999,
@@ -74,10 +454,10 @@ export const products = [
         image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
         images: [
             'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
         ],
         description: 'Beautifully embroidered Anarkali suit for festive occasions.',
-        isNew: true,
+        isNew: false,
         colors: ['#008000', '#FFD700'],
         rating: 4.9,
         reviews: 45,
@@ -85,9 +465,93 @@ export const products = [
         delivery: '3-5 Business Days'
     },
     {
-        id: 5,
-        name: 'Cotton Kurta Set',
-        category: 'Kurta',
+        id: 23,
+        name: 'Maxi Evening Gown',
+        category: 'Dress',
+        fabric: 'Velvet',
+        price: 8999,
+        originalPrice: 11999,
+        discount: 25,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Elegant velvet maxi gown for evening parties.',
+        isNew: true,
+        colors: ['#000080', '#800000'],
+        rating: 4.8,
+        reviews: 32,
+        care: 'Dry Clean Only',
+        delivery: '4-6 Business Days'
+    },
+    {
+        id: 24,
+        name: 'Cotton Midi Dress',
+        category: 'Dress',
+        fabric: 'Cotton',
+        price: 2499,
+        originalPrice: 3499,
+        discount: 29,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Casual cotton midi dress for summer outings.',
+        isNew: false,
+        colors: ['#FFFF00', '#FFFFFF'],
+        rating: 4.4,
+        reviews: 76,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 25,
+        name: 'Chiffon Ruffle Dress',
+        category: 'Dress',
+        fabric: 'Chiffon',
+        price: 3999,
+        originalPrice: 5499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Playful chiffon dress with ruffle details.',
+        isNew: true,
+        colors: ['#FFC0CB', '#87CEEB'],
+        rating: 4.6,
+        reviews: 54,
+        care: 'Hand Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 26,
+        name: 'Silk Party Wear Gown',
+        category: 'Dress',
+        fabric: 'Silk',
+        price: 10999,
+        originalPrice: 13999,
+        discount: 21,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Luxurious silk gown for weddings and receptions.',
+        isNew: true,
+        colors: ['#FFD700', '#C0C0C0'],
+        rating: 4.9,
+        reviews: 28,
+        care: 'Dry Clean Only',
+        delivery: '5-7 Business Days'
+    },
+    {
+        id: 27,
+        name: 'Printed A-Line Dress',
+        category: 'Dress',
         fabric: 'Cotton',
         price: 2999,
         originalPrice: 3999,
@@ -95,35 +559,287 @@ export const products = [
         image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
         images: [
             'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop'
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
         ],
-        description: 'Comfortable cotton kurta set for daily wear.',
+        description: 'Comfortable A-line dress with geometric prints.',
         isNew: false,
-        colors: ['#FFFFFF', '#FFC0CB'],
-        rating: 4.4,
-        reviews: 210,
+        colors: ['#000000', '#FFFFFF'],
+        rating: 4.5,
+        reviews: 92,
         care: 'Machine Wash',
         delivery: '2-4 Business Days'
     },
     {
-        id: 6,
-        name: 'Designer Lehenga',
-        category: 'Lehenga',
+        id: 28,
+        name: 'Velvet Cocktail Dress',
+        category: 'Dress',
         fabric: 'Velvet',
-        price: 18999,
-        originalPrice: 22999,
-        discount: 17,
-        image: 'https://images.unsplash.com/photo-1610030469985-2c0f6f2e8d4f?q=80&w=1974&auto=format&fit=crop',
+        price: 5999,
+        originalPrice: 7999,
+        discount: 25,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
         images: [
-            'https://images.unsplash.com/photo-1610030469985-2c0f6f2e8d4f?q=80&w=1974&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1610030469985-2c0f6f2e8d4f?q=80&w=1974&auto=format&fit=crop'
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
         ],
-        description: 'Premium velvet lehenga with heavy embroidery.',
+        description: 'Chic velvet cocktail dress for evening events.',
         isNew: true,
-        colors: ['#800000', '#FFD700'],
-        rating: 5.0,
-        reviews: 12,
+        colors: ['#800000', '#000080'],
+        rating: 4.7,
+        reviews: 41,
         care: 'Dry Clean Only',
-        delivery: '5-7 Business Days'
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 29,
+        name: 'Boho Chic Maxi Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 3499,
+        originalPrice: 4999,
+        discount: 30,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Bohemian style maxi dress with vibrant prints.',
+        isNew: false,
+        colors: ['#FFA500', '#008080'],
+        rating: 4.6,
+        reviews: 68,
+        care: 'Hand Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 30,
+        name: 'Satin Slip Dress',
+        category: 'Dress',
+        fabric: 'Silk',
+        price: 3999,
+        originalPrice: 5499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Sleek satin slip dress for a minimalist look.',
+        isNew: true,
+        colors: ['#C0C0C0', '#FFD700'],
+        rating: 4.5,
+        reviews: 55,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 31,
+        name: 'Denim Shirt Dress',
+        category: 'Dress',
+        fabric: 'Cotton',
+        price: 2799,
+        originalPrice: 3799,
+        discount: 26,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Casual denim shirt dress for everyday wear.',
+        isNew: false,
+        colors: ['#0000FF', '#87CEEB'],
+        rating: 4.4,
+        reviews: 88,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 32,
+        name: 'Lace Overlay Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 5499,
+        originalPrice: 7499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Elegant dress with intricate lace overlay.',
+        isNew: true,
+        colors: ['#000000', '#FFFFFF'],
+        rating: 4.8,
+        reviews: 36,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 33,
+        name: 'Wrap Style Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 3299,
+        originalPrice: 4499,
+        discount: 27,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Flattering wrap style dress for all body types.',
+        isNew: false,
+        colors: ['#FF0000', '#000080'],
+        rating: 4.6,
+        reviews: 75,
+        care: 'Machine Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 34,
+        name: 'Off-Shoulder Gown',
+        category: 'Dress',
+        fabric: 'Velvet',
+        price: 7999,
+        originalPrice: 9999,
+        discount: 20,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Glamorous off-shoulder velvet gown.',
+        isNew: true,
+        colors: ['#800080', '#006400'],
+        rating: 4.9,
+        reviews: 22,
+        care: 'Dry Clean Only',
+        delivery: '4-6 Business Days'
+    },
+    {
+        id: 35,
+        name: 'Tiered Sundress',
+        category: 'Dress',
+        fabric: 'Cotton',
+        price: 2299,
+        originalPrice: 3299,
+        discount: 30,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Breezy tiered sundress for sunny days.',
+        isNew: false,
+        colors: ['#FFFF00', '#FFA500'],
+        rating: 4.5,
+        reviews: 64,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 36,
+        name: 'Sequined Party Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 6499,
+        originalPrice: 8499,
+        discount: 24,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop'
+        ],
+        description: 'Sparkling sequined dress for night outs.',
+        isNew: true,
+        colors: ['#C0C0C0', '#FFD700'],
+        rating: 4.8,
+        reviews: 42,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 37,
+        name: 'Pleated Midi Skirt Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 3799,
+        originalPrice: 4999,
+        discount: 24,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Sophisticated dress with pleated skirt detail.',
+        isNew: false,
+        colors: ['#008080', '#800000'],
+        rating: 4.6,
+        reviews: 58,
+        care: 'Machine Wash',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 38,
+        name: 'Kaftan Style Dress',
+        category: 'Dress',
+        fabric: 'Silk',
+        price: 4299,
+        originalPrice: 5999,
+        discount: 28,
+        image: 'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Relaxed fit Kaftan dress with rich prints.',
+        isNew: true,
+        colors: ['#FF00FF', '#00FFFF'],
+        rating: 4.7,
+        reviews: 39,
+        care: 'Dry Clean Only',
+        delivery: '3-5 Business Days'
+    },
+    {
+        id: 39,
+        name: 'Bodycon Midi Dress',
+        category: 'Dress',
+        fabric: 'Cotton',
+        price: 1999,
+        originalPrice: 2999,
+        discount: 33,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Form-fitting bodycon dress for a sleek silhouette.',
+        isNew: false,
+        colors: ['#000000', '#800000'],
+        rating: 4.5,
+        reviews: 98,
+        care: 'Machine Wash',
+        delivery: '2-4 Business Days'
+    },
+    {
+        id: 40,
+        name: 'High-Low Hem Dress',
+        category: 'Dress',
+        fabric: 'Georgette',
+        price: 3599,
+        originalPrice: 4799,
+        discount: 25,
+        image: 'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+        images: [
+            'https://images.unsplash.com/photo-1596783437088-213049e36dc1?q=80&w=1974&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1974&auto=format&fit=crop'
+        ],
+        description: 'Trendy high-low hem dress for a modern look.',
+        isNew: true,
+        colors: ['#FF1493', '#4B0082'],
+        rating: 4.6,
+        reviews: 47,
+        care: 'Machine Wash',
+        delivery: '3-5 Business Days'
     }
 ]

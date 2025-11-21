@@ -4,9 +4,9 @@ import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import AddressForm from '../components/checkout/AddressForm'
-import { MapPin, Plus, CheckCircle } from 'lucide-react'
+import { MapPin, Plus, CheckCircle, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, query, getDocs } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 
 const Checkout = () => {
@@ -15,19 +15,9 @@ const Checkout = () => {
     const navigate = useNavigate()
     const [showAddressForm, setShowAddressForm] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState(null)
-    const [addresses, setAddresses] = useState([
-        // Dummy address for demo
-        {
-            id: 1,
-            name: 'John Doe',
-            mobile: '9876543210',
-            pincode: '110001',
-            address: '123, Main Street, Connaught Place',
-            city: 'New Delhi',
-            state: 'Delhi',
-            isDefault: true
-        }
-    ])
+    const [addresses, setAddresses] = useState([])
+    const [loadingAddresses, setLoadingAddresses] = useState(true)
+    const [processingPayment, setProcessingPayment] = useState(false)
 
     useEffect(() => {
         if (!loading) {
@@ -35,19 +25,49 @@ const Checkout = () => {
                 navigate('/shop')
             } else if (!user) {
                 navigate('/login')
+            } else {
+                loadAddresses()
             }
         }
     }, [cart, user, loading, navigate])
+
+    const loadAddresses = async () => {
+        try {
+            const q = query(collection(db, 'users', user.uid, 'addresses'))
+            const querySnapshot = await getDocs(q)
+            const loadedAddresses = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }))
+            setAddresses(loadedAddresses)
+            // Auto-select first address if available
+            if (loadedAddresses.length > 0 && !selectedAddress) {
+                setSelectedAddress(loadedAddresses[0].id)
+            }
+        } catch (error) {
+            console.error('Error loading addresses:', error)
+            toast.error('Failed to load addresses')
+        } finally {
+            setLoadingAddresses(false)
+        }
+    }
 
     if (loading || cart.length === 0 || !user) {
         return null // Or a loading spinner
     }
 
-    const handleAddAddress = (newAddress) => {
-        const addressWithId = { ...newAddress, id: Date.now() }
-        setAddresses([...addresses, addressWithId])
-        setShowAddressForm(false)
-        setSelectedAddress(addressWithId.id)
+    const handleAddAddress = async (newAddress) => {
+        try {
+            const docRef = await addDoc(collection(db, 'users', user.uid, 'addresses'), newAddress)
+            const addressWithId = { ...newAddress, id: docRef.id }
+            setAddresses([...addresses, addressWithId])
+            setShowAddressForm(false)
+            setSelectedAddress(docRef.id)
+            toast.success('Address added successfully')
+        } catch (error) {
+            console.error('Error adding address:', error)
+            toast.error('Failed to add address')
+        }
     }
 
     const handlePayment = async () => {
@@ -96,33 +116,48 @@ const Checkout = () => {
             description: "Transaction",
             image: "https://velcyfashion.com/logo.png",
             handler: async function (response) {
+                setProcessingPayment(true)
                 try {
+                    // Helper to replace undefined with null for Firestore compatibility
+                    const sanitizeData = (data) => {
+                        return JSON.parse(JSON.stringify(data, (key, value) => {
+                            return value === undefined ? null : value;
+                        }));
+                    };
+
+                    if (!selectedAddr) {
+                        throw new Error("Delivery address is missing. Please select an address.");
+                    }
+
                     // Create order in Firestore
-                    const orderData = {
+                    const rawOrderData = {
                         userId: user.uid,
                         items: cart,
                         total: cartTotal,
                         address: selectedAddr,
                         paymentId: response.razorpay_payment_id,
-                        orderId: response.razorpay_order_id,
-                        signature: response.razorpay_signature,
+                        orderId: response.razorpay_order_id || `ORD-${Date.now()}`, // Fallback if no order ID
+                        signature: response.razorpay_signature || '',
                         status: 'confirmed',
                         createdAt: new Date(),
                         updatedAt: new Date()
                     }
+
+                    const orderData = sanitizeData(rawOrderData);
 
                     await addDoc(collection(db, 'orders'), orderData)
                     toast.success('Payment Successful!')
                     navigate('/order-confirmation', {
                         state: {
                             paymentId: response.razorpay_payment_id,
-                            orderId: response.razorpay_order_id,
+                            orderId: orderData.orderId,
                             orderData
                         }
                     })
                 } catch (error) {
                     console.error('Order creation error:', error)
-                    toast.error('Payment successful but order creation failed. Please contact support.')
+                    toast.error(`Order creation failed: ${error.message}`)
+                    setProcessingPayment(false)
                 }
             },
             prefill: {
@@ -144,6 +179,22 @@ const Checkout = () => {
 
     return (
         <Layout>
+            {/* Processing Overlay */}
+            {processingPayment && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+                    <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+                        <Loader2 className="w-16 h-16 text-accent animate-spin mx-auto mb-4" />
+                        <h3 className="text-2xl font-bold mb-2">Processing Your Order</h3>
+                        <p className="text-gray-600">Please wait while we confirm your payment and create your order...</p>
+                        <div className="mt-6 flex items-center justify-center gap-2">
+                            <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="bg-gray-50 py-12 min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl font-heading font-bold mb-8">Checkout</h1>
@@ -173,7 +224,12 @@ const Checkout = () => {
                                         onSave={handleAddAddress}
                                         onCancel={() => setShowAddressForm(false)}
                                     />
-                                ) : (
+                                ) : loadingAddresses ? (
+                                    <div className="text-center py-8">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
+                                        <p className="text-gray-500 mt-2">Loading addresses...</p>
+                                    </div>
+                                ) : addresses.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {addresses.map((addr) => (
                                             <div
@@ -192,6 +248,12 @@ const Checkout = () => {
                                                 <p className="text-sm text-gray-600 mt-2 font-medium">Mobile: {addr.mobile}</p>
                                             </div>
                                         ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-8 text-gray-500">
+                                        <MapPin size={48} className="mx-auto mb-4 opacity-20" />
+                                        <p className="text-lg">No saved addresses</p>
+                                        <p className="text-sm mt-2">Click "Add New" to add your first address</p>
                                     </div>
                                 )}
                             </div>
@@ -248,9 +310,10 @@ const Checkout = () => {
 
                                 <button
                                     onClick={handlePayment}
-                                    className="w-full bg-accent text-white font-bold py-4 rounded-xl mt-8 hover:bg-primary transition-colors shadow-lg shadow-accent/20"
+                                    disabled={processingPayment}
+                                    className="w-full bg-accent text-white font-bold py-4 rounded-xl mt-8 hover:bg-primary transition-colors shadow-lg shadow-accent/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Pay Now
+                                    {processingPayment ? 'Processing...' : 'Pay Now'}
                                 </button>
                             </div>
                         </div>

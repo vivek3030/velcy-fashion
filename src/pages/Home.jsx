@@ -16,7 +16,7 @@ const Home = () => {
             <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-gray-900">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1583391733958-e023765f350a?q=80&w=2071&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1974&auto=format&fit=crop"
                         alt="Elegant Saree"
                         className="w-full h-full object-cover opacity-60"
                     />

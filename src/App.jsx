@@ -13,11 +13,13 @@ const Shop = lazy(() => import('./pages/Shop'))
 const ProductDetails = lazy(() => import('./pages/ProductDetails'))
 const Login = lazy(() => import('./pages/Login'))
 const Profile = lazy(() => import('./pages/Profile'))
+const About = lazy(() => import('./pages/About'))
 const Checkout = lazy(() => import('./pages/Checkout'))
 const OrderConfirmation = lazy(() => import('./pages/OrderConfirmation'))
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'))
 const Products = lazy(() => import('./pages/admin/Products'))
 const Orders = lazy(() => import('./pages/admin/Orders'))
+const Customers = lazy(() => import('./pages/admin/Customers'))
 
 function App() {
     return (
@@ -39,11 +41,13 @@ function App() {
                                         <Route path="/product/:id" element={<ProductDetails />} />
                                         <Route path="/login" element={<Login />} />
                                         <Route path="/profile" element={<Profile />} />
+                                        <Route path="/about" element={<About />} />
                                         <Route path="/checkout" element={<Checkout />} />
                                         <Route path="/order-confirmation" element={<OrderConfirmation />} />
                                         <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
                                         <Route path="/admin/products" element={<ProtectedAdminRoute><Products /></ProtectedAdminRoute>} />
                                         <Route path="/admin/orders" element={<ProtectedAdminRoute><Orders /></ProtectedAdminRoute>} />
+                                        <Route path="/admin/customers" element={<ProtectedAdminRoute><Customers /></ProtectedAdminRoute>} />
                                     </Routes>
                                 </Suspense>
                             </div>

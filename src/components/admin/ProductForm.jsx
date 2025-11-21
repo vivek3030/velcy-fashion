@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { X, Upload, Plus } from 'lucide-react'
+import { X, Upload, Plus, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { storage } from '../../lib/firebase'
 
 const ProductForm = ({ onClose, onSave, initialData = {} }) => {
-    // ... existing state initialization ...
     const [formData, setFormData] = useState({
         name: initialData.name || '',
         category: initialData.category || 'saree',
@@ -18,17 +19,17 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
 
     const [newColor, setNewColor] = useState('')
     const [newImage, setNewImage] = useState('')
+    const [selectedFiles, setSelectedFiles] = useState([])
+    const [uploading, setUploading] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        // Prevent negative numbers for price and stock
         if ((name === 'price' || name === 'stock' || name === 'salePrice') && value < 0) {
             return
         }
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    // ... existing handleAddColor, handleAddImage ...
     const handleAddColor = () => {
         if (newColor && !formData.colors.includes(newColor)) {
             setFormData(prev => ({ ...prev, colors: [...prev.colors, newColor] }))
@@ -43,7 +44,29 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFiles(Array.from(e.target.files))
+        }
+    }
+
+    const uploadImages = async () => {
+        const uploadedUrls = []
+        for (const file of selectedFiles) {
+            const storageRef = ref(storage, `products/${Date.now()}_${file.name}`)
+            try {
+                const snapshot = await uploadBytes(storageRef, file)
+                const downloadURL = await getDownloadURL(snapshot.ref)
+                uploadedUrls.push(downloadURL)
+            } catch (error) {
+                console.error("Error uploading image:", error)
+                toast.error(`Failed to upload ${file.name}`)
+            }
+        }
+        return uploadedUrls
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (Number(formData.price) <= 0) {
             toast.error('Price must be greater than 0')
@@ -53,15 +76,34 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
             toast.error('Stock cannot be negative')
             return
         }
-        onSave(formData)
+
+        setUploading(true)
+        try {
+            let finalImages = [...formData.images]
+
+            if (selectedFiles.length > 0) {
+                const newImageUrls = await uploadImages()
+                finalImages = [...finalImages, ...newImageUrls]
+            }
+
+            if (finalImages.length === 0) {
+                toast.error('Please add at least one image (URL or File)')
+                setUploading(false)
+                return
+            }
+
+            onSave({ ...formData, images: finalImages })
+        } catch (error) {
+            console.error('Error saving product:', error)
+            toast.error('Failed to save product')
+        } finally {
+            setUploading(false)
+        }
     }
 
-    // ... return JSX (same as before, just ensure handleSubmit is used) ...
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            {/* ... existing JSX structure ... */}
             <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                {/* ... header ... */}
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
                     <h2 className="text-xl font-bold">{initialData.id ? 'Edit Product' : 'Add New Product'}</h2>
                     <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
@@ -70,7 +112,6 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                    {/* ... inputs ... */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
@@ -97,7 +138,6 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                         </div>
                     </div>
 
-                    {/* Price & Stock */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
@@ -136,7 +176,6 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                         </div>
                     </div>
 
-                    {/* ... rest of the form (Description, Fabric, Colors, Images, Buttons) ... */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea
@@ -189,11 +228,28 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Images (URLs)</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
+
+                        {/* File Upload */}
+                        <div className="mb-4">
+                            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <Upload className="w-8 h-8 mb-3 text-gray-400" />
+                                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                    <p className="text-xs text-gray-500">PNG, JPG or WEBP</p>
+                                </div>
+                                <input type="file" className="hidden" multiple accept="image/*" onChange={handleFileChange} />
+                            </label>
+                            {selectedFiles.length > 0 && (
+                                <p className="text-sm text-green-600 mt-2">{selectedFiles.length} file(s) selected</p>
+                            )}
+                        </div>
+
+                        {/* URL Input (Fallback) */}
                         <div className="flex gap-2 mb-2">
                             <input
                                 type="text"
-                                placeholder="Image URL"
+                                placeholder="Or enter Image URL"
                                 value={newImage}
                                 onChange={(e) => setNewImage(e.target.value)}
                                 className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-accent"
@@ -202,6 +258,8 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                                 <Plus size={20} />
                             </button>
                         </div>
+
+                        {/* Image Preview */}
                         <div className="grid grid-cols-4 gap-4 mt-2">
                             {formData.images.map((img, index) => (
                                 <div key={index} className="relative group aspect-square bg-gray-100 rounded-lg overflow-hidden">
@@ -221,13 +279,22 @@ const ProductForm = ({ onClose, onSave, initialData = {} }) => {
                     <div className="flex gap-4 pt-4 border-t border-gray-100">
                         <button
                             type="submit"
-                            className="flex-1 bg-accent text-white font-bold py-3 rounded-lg hover:bg-primary transition-colors"
+                            disabled={uploading}
+                            className="flex-1 bg-accent text-white font-bold py-3 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
-                            Save Product
+                            {uploading ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Uploading...
+                                </>
+                            ) : (
+                                'Save Product'
+                            )}
                         </button>
                         <button
                             type="button"
                             onClick={onClose}
+                            disabled={uploading}
                             className="flex-1 border border-gray-300 text-gray-600 font-bold py-3 rounded-lg hover:bg-gray-50 transition-colors"
                         >
                             Cancel

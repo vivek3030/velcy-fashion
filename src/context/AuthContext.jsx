@@ -114,35 +114,63 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const mockLogin = async (phoneNumber) => {
+        try {
+            // Create a mock user for testing
+            const mockUserId = phoneNumber.replace(/\+/g, '')
+            const userRef = doc(db, 'users', mockUserId)
+            const userSnap = await getDoc(userRef)
+
+            // Determine role based on phone number
+            // If phone ends with '0000', make them admin, otherwise regular user
+            const role = phoneNumber.endsWith('0000') ? 'admin' : 'user'
+
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    phoneNumber: phoneNumber,
+                    createdAt: new Date(),
+                    role: role
+                })
+            }
+
+            // Create a mock user object
+            const mockUser = {
+                uid: mockUserId,
+                phoneNumber: phoneNumber,
+                role: role
+            }
+
+            setUser(mockUser)
+            toast.success(`Logged in as ${role}`)
+        } catch (error) {
+            console.error('Mock login error:', error)
+            toast.error('Failed to login')
+        }
+    }
+
     const logout = async () => {
         try {
             await signOut(auth)
+            setUser(null) // Explicitly clear user state (fixes mock login logout)
             toast.success('Logged out')
         } catch (error) {
-            toast.error('Error logging out')
+            console.error('Logout error:', error)
+            toast.error('Failed to log out')
         }
     }
 
-    // MOCK LOGIN FOR DEVELOPMENT ONLY
-    const mockLogin = (phoneNumber) => {
-        // Only allow mock login in development
-        if (import.meta.env.MODE !== 'development') {
-            toast.error('Mock login is not available in production')
-            return
-        }
-
-        const mockUser = {
-            uid: 'mock-user-123',
-            phoneNumber: phoneNumber,
-            displayName: 'Test User',
-            role: 'user'
-        }
-        setUser(mockUser)
-        toast.success('Mock Login Successful (Development Only)')
+    const value = {
+        user,
+        loading,
+        sendOtp,
+        verifyOtp,
+        mockLogin,
+        logout,
+        otpCooldown
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, sendOtp, verifyOtp, logout, mockLogin, otpCooldown }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, Menu, X, Search, User } from 'lucide-react'
+import { ShoppingBag, Menu, X, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../../context/CartContext'
 import logo from '../../assets/logo.png'
@@ -19,37 +19,33 @@ const Navbar = () => {
     }, [])
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-sm py-4`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2">
-                        <img src={logo} alt="VelcyFashion" className="h-12 w-auto" />
+                        <img src={logo} alt="VelcyFashion" className="h-10 md:h-12 w-auto object-contain" />
                     </Link>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link to="/" className={`font-medium transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>Home</Link>
-                        <Link to="/shop?category=sarees" className={`font-medium transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>Sarees</Link>
-                        <Link to="/shop?category=dresses" className={`font-medium transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>Dresses</Link>
-                        <Link to="/about" className={`font-medium transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>Our Story</Link>
+                        <Link to="/" className="font-medium text-primary hover:text-accent transition-colors">Home</Link>
+                        <Link to="/shop?category=sarees" className="font-medium text-primary hover:text-accent transition-colors">Sarees</Link>
+                        <Link to="/shop?category=dresses" className="font-medium text-primary hover:text-accent transition-colors">Dresses</Link>
                     </div>
 
                     {/* Icons */}
                     <div className="hidden md:flex items-center space-x-6">
-                        <button className={`transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>
-                            <Search size={20} />
-                        </button>
-                        <Link to="/profile" className={`transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}>
-                            <User size={20} />
+                        <Link to="/profile" className="text-primary hover:text-accent transition-colors">
+                            <User size={22} />
                         </Link>
                         <button
                             onClick={() => setIsCartOpen(true)}
                             data-testid="cart-button"
                             aria-label="Cart"
-                            className={`relative transition-colors ${isScrolled ? 'text-primary hover:text-accent' : 'text-primary hover:text-accent'}`}
+                            className="relative text-primary hover:text-accent transition-colors"
                         >
-                            <ShoppingBag size={20} />
+                            <ShoppingBag size={22} />
                             {cartCount > 0 && (
                                 <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                                     {cartCount}
@@ -59,10 +55,21 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden flex items-center">
+                    <div className="md:hidden flex items-center gap-4">
+                        <button
+                            onClick={() => setIsCartOpen(true)}
+                            className="relative text-primary"
+                        >
+                            <ShoppingBag size={22} />
+                            {cartCount > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className={`focus:outline-none ${isScrolled ? 'text-primary' : 'text-primary'}`}
+                            className="focus:outline-none text-primary"
                         >
                             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -77,20 +84,16 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+                        className="md:hidden bg-white border-t border-gray-100 overflow-hidden absolute top-full left-0 right-0 shadow-lg"
                     >
-                        <div className="px-4 pt-2 pb-6 space-y-2">
-                            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Home</Link>
-                            <Link to="/shop?category=sarees" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Sarees</Link>
-                            <Link to="/shop?category=dresses" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Dresses</Link>
-                            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-primary hover:bg-gray-50 rounded-md">Our Story</Link>
-                            <div className="border-t border-gray-100 pt-4 mt-4 flex space-x-6 px-3">
-                                <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-primary hover:text-accent">
-                                    <User size={20} className="mr-2" /> Profile
+                        <div className="px-4 py-6 space-y-4">
+                            <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Home</Link>
+                            <Link to="/shop?category=sarees" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Sarees</Link>
+                            <Link to="/shop?category=dresses" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Dresses</Link>
+                            <div className="border-t border-gray-100 pt-4 mt-4">
+                                <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-primary hover:text-accent text-lg font-medium">
+                                    <User size={20} className="mr-3" /> Profile
                                 </Link>
-                                <button onClick={() => { setIsMobileMenuOpen(false); setIsCartOpen(true); }} className="flex items-center text-primary hover:text-accent w-full text-left">
-                                    <ShoppingBag size={20} className="mr-2" /> Cart ({cartCount})
-                                </button>
                             </div>
                         </div>
                     </motion.div>
