@@ -411,16 +411,14 @@ const notificationService = new NotificationService()
 export default notificationService
 
 // Export for easy use in components
-export const {
-    sendSMS,
-    sendEmail,
-    notifyOrderConfirmation,
-    notifyOrderAssigned,
-    notifyOrderPickedUp,
-    notifyOrderOutForDelivery,
-    notifyOrderDelivered,
-    notifyPaymentSuccess,
-    notifyDeliveryFailed,
-    notifyAgentAssignment,
-    getNotificationStats
-} = notificationService
+export const sendSMS = (...args) => notificationService.sendSMS(...args)
+export const sendEmail = (...args) => notificationService.sendEmail(...args)
+export const notifyOrderConfirmation = (...args) => notificationService.notifyOrderConfirmation(...args)
+export const notifyOrderAssigned = (...args) => notificationService.notifyOrderAssigned(...args)
+export const notifyOrderPickedUp = (...args) => notificationService.notifyOrderPickedUp(...args)
+export const notifyOrderOutForDelivery = (...args) => notificationService.notifyOrderOutForDelivery(...args)
+export const notifyOrderDelivered = (...args) => notificationService.notifyOrderDelivered(...args)
+export const notifyPaymentSuccess = (...args) => notificationService.notifyPaymentSuccess(...args)
+export const notifyDeliveryFailed = (...args) => notificationService.notifyDeliveryFailed(...args)
+export const notifyAgentAssignment = (...args) => notificationService.notifyAgentAssignment(...args)
+export const getNotificationStats = (...args) => notificationService.getNotificationStats(...args)
