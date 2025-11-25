@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, ShoppingBag, Package, Users, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, Package, Users, LogOut, Menu, X, Truck } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const AdminLayout = ({ children }) => {
@@ -19,6 +19,7 @@ const AdminLayout = ({ children }) => {
         { icon: ShoppingBag, label: 'Products', path: '/admin/products' },
         { icon: Package, label: 'Orders', path: '/admin/orders' },
         { icon: Users, label: 'Customers', path: '/admin/customers' },
+        { icon: Truck, label: 'Delivery Agents', path: '/admin/delivery-agents' },
     ]
 
     return (

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, Menu, X, User } from 'lucide-react'
+import { ShoppingBag, Menu, X, User, Heart } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../../context/CartContext'
+import { useWishlist } from '../../context/WishlistContext'
 import logo from '../../assets/logo.png'
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const { cartCount, setIsCartOpen } = useCart()
+    const { wishlist } = useWishlist()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -39,6 +41,14 @@ const Navbar = () => {
                         <Link to="/profile" className="text-primary hover:text-accent transition-colors">
                             <User size={22} />
                         </Link>
+                        <Link to="/wishlist" className="relative text-primary hover:text-accent transition-colors" aria-label="Wishlist">
+                            <Heart size={22} />
+                            {wishlist.length > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {wishlist.length}
+                                </span>
+                            )}
+                        </Link>
                         <button
                             onClick={() => setIsCartOpen(true)}
                             data-testid="cart-button"
@@ -56,6 +66,14 @@ const Navbar = () => {
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center gap-4">
+                        <Link to="/wishlist" className="relative text-primary">
+                            <Heart size={22} />
+                            {wishlist.length > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {wishlist.length}
+                                </span>
+                            )}
+                        </Link>
                         <button
                             onClick={() => setIsCartOpen(true)}
                             className="relative text-primary"
@@ -90,7 +108,10 @@ const Navbar = () => {
                             <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Home</Link>
                             <Link to="/shop?category=sarees" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Sarees</Link>
                             <Link to="/shop?category=dresses" onClick={() => setIsMobileMenuOpen(false)} className="block text-lg font-medium text-primary hover:text-accent">Dresses</Link>
-                            <div className="border-t border-gray-100 pt-4 mt-4">
+                            <div className="border-t border-gray-100 pt-4 mt-4 space-y-3">
+                                <Link to="/wishlist" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-primary hover:text-accent text-lg font-medium">
+                                    <Heart size={20} className="mr-3" /> Wishlist
+                                </Link>
                                 <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center text-primary hover:text-accent text-lg font-medium">
                                     <User size={20} className="mr-3" /> Profile
                                 </Link>

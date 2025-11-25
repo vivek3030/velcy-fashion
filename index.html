@@ -4,13 +4,154 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VelcyFashion | Modern Ethnic Wear</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover exquisite collection of premium sarees and dresses at Velcy Fashion. Shop authentic Kanjivaram, Banarasi, and designer ethnic wear with free shipping across India." />
+    <meta name="keywords" content="sarees, dresses, fashion, ethnic wear, kanjivaram, banarasi, online shopping, velcyfashion, surat, gujarat, indian wear, designer sarees" />
+    <meta name="author" content="VelcyFashion" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Velcy Fashion - Premium Sarees & Dresses" />
+    <meta property="og:description" content="Discover exquisite collection of premium sarees and dresses at Velcy Fashion. Shop authentic Kanjivaram, Banarasi, and designer ethnic wear." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://velcyfashion.com" />
+    <meta property="og:image" content="https://velcyfashion.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Velcy Fashion" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Velcy Fashion - Premium Sarees & Dresses" />
+    <meta name="twitter:description" content="Discover exquisite collection of premium sarees and dresses at Velcy Fashion." />
+    <meta name="twitter:image" content="https://velcyfashion.com/og-image.jpg" />
+
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#d4af37" />
+    <meta name="msapplication-TileColor" content="#d4af37" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <!-- Geolocation Meta Tags -->
+    <meta name="geo.region" content="IN-GJ" />
+    <meta name="geo.placename" content="Surat, Gujarat" />
+    <meta name="ICBM" content="21.1702,72.8311" />
+
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://firebase.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/favicon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144x144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/favicon-120x120.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Velcy Fashion",
+      "url": "https://velcyfashion.com",
+      "logo": "https://velcyfashion.com/logo.png",
+      "description": "Premium sarees and dresses online store",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9876543210",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Hindi"]
+      },
+      "sameAs": [
+        "https://www.facebook.com/velcyfashion",
+        "https://www.instagram.com/velcyfashion"
+      ]
+    }
+    </script>
+
+    <title>Velcy Fashion - Premium Sarees & Dresses Online</title>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('✅ Service Worker registered with scope:', registration.scope);
+            })
+            .catch((error) => {
+              console.error('❌ Service Worker registration failed:', error);
+            });
+        });
+      }
+
+      // Connection status monitoring
+      function updateConnectionStatus() {
+        const isOnline = navigator.onLine;
+        document.body.classList.toggle('offline', !isOnline);
+
+        if (!isOnline) {
+          // Show offline notification if implemented
+          console.log('📡 App is now offline');
+        } else {
+          console.log('🌐 App is back online');
+        }
+      }
+
+      window.addEventListener('online', updateConnectionStatus);
+      window.addEventListener('offline', updateConnectionStatus);
+      updateConnectionStatus();
+
+      // Performance monitoring
+      if ('performance' in window && 'measure' in performance) {
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const navigation = performance.getEntriesByType('navigation')[0];
+            if (navigation) {
+              console.log('🚀 Page Load Performance:');
+              console.log(`- DNS Lookup: ${navigation.domainLookupEnd - navigation.domainLookupStart}ms`);
+              console.log(`- TCP Connection: ${navigation.connectEnd - navigation.connectStart}ms`);
+              console.log(`- Server Response: ${navigation.responseEnd - navigation.requestStart}ms`);
+              console.log(`- DOM Load: ${navigation.domContentLoadedEventEnd - navigation.navigationStart}ms`);
+              console.log(`- Full Load: ${navigation.loadEventEnd - navigation.navigationStart}ms`);
+            }
+          }, 0);
+        });
+      }
+    </script>
+
+    <!-- Fallback for older browsers -->
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>JavaScript Required</h1>
+        <p>Please enable JavaScript to use Velcy Fashion.</p>
+        <style>
+          body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; }
+          .noscript-container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        </style>
+      </div>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

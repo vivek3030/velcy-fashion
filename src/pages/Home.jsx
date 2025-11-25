@@ -24,6 +24,17 @@ const Home = () => {
                 </div>
 
                 <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="mb-6"
+                    >
+                        <span className="bg-accent text-primary text-sm font-bold px-6 py-2 rounded-full tracking-wider">
+                            NEW COLLECTION 2024
+                        </span>
+                    </motion.div>
+
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -33,6 +44,7 @@ const Home = () => {
                         Timeless Elegance, <br />
                         <span className="text-accent">Modern Soul</span>
                     </motion.h1>
+
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -41,18 +53,45 @@ const Home = () => {
                     >
                         Discover our exclusive collection of handpicked sarees and contemporary dresses designed for the modern woman.
                     </motion.p>
+
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row gap-4 justify-center"
+                        className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
                     >
-                        <Link to="/shop?category=sarees" className="bg-accent text-primary font-bold py-4 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center justify-center">
+                        <Link
+                            to="/shop?category=sarees"
+                            className="bg-accent text-primary font-bold py-4 px-8 rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center justify-center shadow-lg"
+                        >
                             Shop Sarees <ArrowRight className="ml-2" size={20} />
                         </Link>
-                        <Link to="/shop?category=dresses" className="bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold py-4 px-8 rounded-full hover:bg-white hover:text-primary transition-all transform hover:scale-105 flex items-center justify-center">
+                        <Link
+                            to="/shop?category=dresses"
+                            className="bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold py-4 px-8 rounded-full hover:bg-white hover:text-primary transition-all transform hover:scale-105 flex items-center justify-center"
+                        >
                             Explore Dresses
                         </Link>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="grid grid-cols-3 gap-8 max-w-2xl mx-auto"
+                    >
+                        <div className="text-center">
+                            <div className="text-2xl md:text-3xl font-bold text-white mb-2">500+</div>
+                            <div className="text-sm md:text-base text-gray-300 uppercase tracking-wider">DESIGNS</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-2xl md:text-3xl font-bold text-white mb-2">24hr</div>
+                            <div className="text-sm md:text-base text-gray-300 uppercase tracking-wider">SHIPPING</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-2xl md:text-3xl font-bold text-white mb-2">★★★★★</div>
+                            <div className="text-sm md:text-base text-gray-300 uppercase tracking-wider">RATED</div>
+                        </div>
                     </motion.div>
                 </div>
             </section>

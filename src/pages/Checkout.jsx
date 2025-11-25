@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react'
 import Layout from '../components/layout/Layout'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { useAddress } from '../context/AddressContext'
 import { useNavigate } from 'react-router-dom'
-import AddressForm from '../components/checkout/AddressForm'
-import { MapPin, Plus, CheckCircle, Loader2 } from 'lucide-react'
+import AddressManager from '../components/addresses/AddressManager'
+import { MapPin, CheckCircle, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { collection, addDoc, query, getDocs } from 'firebase/firestore'
+import notificationService from '../lib/notificationService'
+import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 
 const Checkout = () => {
     const { cart, cartTotal } = useCart()
     const { user, loading } = useAuth()
+    const { addresses, defaultAddressId, getDefaultAddress } = useAddress()
     const navigate = useNavigate()
-    const [showAddressForm, setShowAddressForm] = useState(false)
-    const [selectedAddress, setSelectedAddress] = useState(null)
-    const [addresses, setAddresses] = useState([])
-    const [loadingAddresses, setLoadingAddresses] = useState(true)
+    const [selectedAddressId, setSelectedAddressId] = useState(null)
     const [processingPayment, setProcessingPayment] = useState(false)
 
     useEffect(() => {
@@ -26,59 +26,24 @@ const Checkout = () => {
             } else if (!user) {
                 navigate('/login')
             } else {
-                loadAddresses()
+                // Auto-select default address if available
+                const defaultAddr = getDefaultAddress()
+                if (defaultAddr && !selectedAddressId) {
+                    setSelectedAddressId(defaultAddr.id)
+                }
             }
         }
-    }, [cart, user, loading, navigate])
-
-    const loadAddresses = async () => {
-        try {
-            const q = query(collection(db, 'users', user.uid, 'addresses'))
-            const querySnapshot = await getDocs(q)
-            const loadedAddresses = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }))
-            setAddresses(loadedAddresses)
-            // Auto-select first address if available
-            if (loadedAddresses.length > 0 && !selectedAddress) {
-                setSelectedAddress(loadedAddresses[0].id)
-            }
-        } catch (error) {
-            console.error('Error loading addresses:', error)
-            toast.error('Failed to load addresses')
-        } finally {
-            setLoadingAddresses(false)
-        }
-    }
+    }, [cart, user, loading, navigate, selectedAddressId, getDefaultAddress])
 
     if (loading || cart.length === 0 || !user) {
         return null // Or a loading spinner
     }
 
-    const handleAddAddress = async (newAddress) => {
-        try {
-            const docRef = await addDoc(collection(db, 'users', user.uid, 'addresses'), newAddress)
-            const addressWithId = { ...newAddress, id: docRef.id }
-            setAddresses([...addresses, addressWithId])
-            setShowAddressForm(false)
-            setSelectedAddress(docRef.id)
-            toast.success('Address added successfully')
-        } catch (error) {
-            console.error('Error adding address:', error)
-            toast.error('Failed to add address')
-        }
-    }
-
     const handlePayment = async () => {
-        if (!selectedAddress && addresses.length === 0) {
-            toast.error('Please add an address')
+        const selectedAddr = addresses.find(addr => addr.id === selectedAddressId) || getDefaultAddress()
+        if (!selectedAddr) {
+            toast.error('Please select or add an address')
             return
-        }
-
-        let finalAddressId = selectedAddress
-        if (!finalAddressId && addresses.length > 0) {
-            finalAddressId = addresses[0].id
         }
 
         // Validate Razorpay configuration
@@ -106,8 +71,6 @@ const Checkout = () => {
             return
         }
 
-        const selectedAddr = addresses.find(a => a.id === finalAddressId)
-
         const options = {
             key: razorpayKey,
             amount: cartTotal * 100,
@@ -134,9 +97,21 @@ const Checkout = () => {
                         userId: user.uid,
                         items: cart,
                         total: cartTotal,
-                        address: selectedAddr,
+                        address: {
+                            name: selectedAddr.name,
+                            phone: selectedAddr.phone,
+                            address: selectedAddr.address,
+                            city: selectedAddr.city,
+                            state: selectedAddr.state,
+                            pincode: selectedAddr.pincode,
+                            landmark: selectedAddr.landmark,
+                            area: selectedAddr.area
+                        },
+                        customerName: selectedAddr.name,
+                        customerPhone: selectedAddr.phone,
+                        customerEmail: user.email,
                         paymentId: response.razorpay_payment_id,
-                        orderId: response.razorpay_order_id || `ORD-${Date.now()}`, // Fallback if no order ID
+                        orderId: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
                         signature: response.razorpay_signature || '',
                         status: 'confirmed',
                         createdAt: new Date(),
@@ -145,7 +120,21 @@ const Checkout = () => {
 
                     const orderData = sanitizeData(rawOrderData);
 
-                    await addDoc(collection(db, 'orders'), orderData)
+                    // Create order in Firebase
+                    const orderRef = await addDoc(collection(db, 'orders'), orderData)
+
+                    // Send payment success notification
+                    await notificationService.notifyPaymentSuccess({
+                        ...orderData,
+                        id: orderRef.id
+                    })
+
+                    // Send order confirmation notification
+                    await notificationService.notifyOrderConfirmation({
+                        ...orderData,
+                        id: orderRef.id
+                    })
+
                     toast.success('Payment Successful!')
                     navigate('/order-confirmation', {
                         state: {
@@ -205,57 +194,16 @@ const Checkout = () => {
 
                             {/* Address Section */}
                             <div className="bg-white p-6 rounded-xl shadow-sm">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-xl font-bold flex items-center gap-2">
-                                        <MapPin className="text-accent" /> Shipping Address
-                                    </h2>
-                                    {!showAddressForm && (
-                                        <button
-                                            onClick={() => setShowAddressForm(true)}
-                                            className="text-accent font-bold text-sm hover:underline flex items-center gap-1"
-                                        >
-                                            <Plus size={16} /> Add New
-                                        </button>
-                                    )}
+                                <div className="flex items-center gap-2 mb-6">
+                                    <MapPin className="text-accent" />
+                                    <h2 className="text-xl font-bold">Shipping Address</h2>
                                 </div>
 
-                                {showAddressForm ? (
-                                    <AddressForm
-                                        onSave={handleAddAddress}
-                                        onCancel={() => setShowAddressForm(false)}
-                                    />
-                                ) : loadingAddresses ? (
-                                    <div className="text-center py-8">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto"></div>
-                                        <p className="text-gray-500 mt-2">Loading addresses...</p>
-                                    </div>
-                                ) : addresses.length > 0 ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {addresses.map((addr) => (
-                                            <div
-                                                key={addr.id}
-                                                onClick={() => setSelectedAddress(addr.id)}
-                                                className={`border-2 rounded-xl p-4 cursor-pointer relative transition-all ${selectedAddress === addr.id || (addresses.length === 1 && !selectedAddress) ? 'border-accent bg-accent/5' : 'border-gray-200 hover:border-gray-300'}`}
-                                            >
-                                                {(selectedAddress === addr.id || (addresses.length === 1 && !selectedAddress)) && (
-                                                    <div className="absolute top-4 right-4 text-accent">
-                                                        <CheckCircle size={20} fill="currentColor" className="text-white" />
-                                                    </div>
-                                                )}
-                                                <h3 className="font-bold">{addr.name}</h3>
-                                                <p className="text-sm text-gray-600 mt-1">{addr.address}</p>
-                                                <p className="text-sm text-gray-600">{addr.city}, {addr.state} - {addr.pincode}</p>
-                                                <p className="text-sm text-gray-600 mt-2 font-medium">Mobile: {addr.mobile}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-center py-8 text-gray-500">
-                                        <MapPin size={48} className="mx-auto mb-4 opacity-20" />
-                                        <p className="text-lg">No saved addresses</p>
-                                        <p className="text-sm mt-2">Click "Add New" to add your first address</p>
-                                    </div>
-                                )}
+                                <AddressManager
+                                    selectedAddressId={selectedAddressId}
+                                    onAddressSelect={(address) => setSelectedAddressId(address?.id)}
+                                    compact={true}
+                                />
                             </div>
 
                             {/* Payment Method (Mock) */}
