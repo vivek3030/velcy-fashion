@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AdminLayout from '../../components/admin/AdminLayout'
 import { motion } from 'framer-motion'
-import { Plus, User, Phone, Mail, MapPin, Star, Bike, Van, Truck, Clock, TrendingUp, Loader2, Edit, Trash2 } from 'lucide-react'
+import { Plus, User, Phone, Mail, MapPin, Star, Bike, Car, Truck, Clock, TrendingUp, Loader2, Edit, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { deliveryAgentService, suggestBestAgents } from '../../lib/deliveryService'
 import SEO from '../../components/common/SEO'
@@ -150,7 +150,7 @@ const DeliveryAgents = () => {
     const getVehicleIcon = (type) => {
         switch (type) {
             case 'bike': return <Bike size={20} />
-            case 'van': return <Van size={20} />
+            case 'van': return <Car size={20} />
             case 'truck': return <Truck size={20} />
             default: return <Bike size={20} />
         }

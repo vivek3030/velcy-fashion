@@ -32,35 +32,35 @@ function App() {
                 <WishlistProvider>
                     <CartProvider>
                         <AddressProvider>
-                        <Router>
-                            <div className="min-h-screen bg-secondary font-sans text-primary">
-                                <CartDrawer />
-                                <Suspense fallback={
-                                    <div className="min-h-screen flex items-center justify-center">
-                                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-accent"></div>
-                                    </div>
-                                }>
-                                    <Routes>
-                                        <Route path="/" element={<Home />} />
-                                        <Route path="/shop" element={<Shop />} />
-                                        <Route path="/product/:id" element={<ProductDetails />} />
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="/profile" element={<Profile />} />
-                                        <Route path="/wishlist" element={<Wishlist />} />
-                                        <Route path="/track-order" element={<TrackOrder />} />
-                                        <Route path="/track-order/:orderId" element={<TrackOrder />} />
-                                        <Route path="/about" element={<About />} />
-                                        <Route path="/checkout" element={<Checkout />} />
-                                        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                                        <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
-                                        <Route path="/admin/products" element={<ProtectedAdminRoute><Products /></ProtectedAdminRoute>} />
-                                        <Route path="/admin/orders" element={<ProtectedAdminRoute><Orders /></ProtectedAdminRoute>} />
-                                        <Route path="/admin/customers" element={<ProtectedAdminRoute><Customers /></ProtectedAdminRoute>} />
-                                        <Route path="/admin/delivery-agents" element={<ProtectedAdminRoute><DeliveryAgents /></ProtectedAdminRoute>} />
-                                    </Routes>
-                                </Suspense>
-                            </div>
-                        </Router>
+                            <Router>
+                                <div className="min-h-screen bg-secondary font-sans text-primary">
+                                    <CartDrawer />
+                                    <Suspense fallback={
+                                        <div className="min-h-screen flex items-center justify-center">
+                                            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-accent"></div>
+                                        </div>
+                                    }>
+                                        <Routes>
+                                            <Route path="/" element={<Home />} />
+                                            <Route path="/shop" element={<Shop />} />
+                                            <Route path="/product/:id" element={<ProductDetails />} />
+                                            <Route path="/login" element={<Login />} />
+                                            <Route path="/profile" element={<Profile />} />
+                                            <Route path="/wishlist" element={<Wishlist />} />
+                                            <Route path="/track-order" element={<TrackOrder />} />
+                                            <Route path="/track-order/:orderId" element={<TrackOrder />} />
+                                            <Route path="/about" element={<About />} />
+                                            <Route path="/checkout" element={<Checkout />} />
+                                            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                                            <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
+                                            <Route path="/admin/products" element={<ProtectedAdminRoute><Products /></ProtectedAdminRoute>} />
+                                            <Route path="/admin/orders" element={<ProtectedAdminRoute><Orders /></ProtectedAdminRoute>} />
+                                            <Route path="/admin/customers" element={<ProtectedAdminRoute><Customers /></ProtectedAdminRoute>} />
+                                            <Route path="/admin/delivery-agents" element={<ProtectedAdminRoute><DeliveryAgents /></ProtectedAdminRoute>} />
+                                        </Routes>
+                                    </Suspense>
+                                </div>
+                            </Router>
                         </AddressProvider>
                     </CartProvider>
                 </WishlistProvider>

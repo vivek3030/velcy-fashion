@@ -123,19 +123,20 @@ const SEO = ({
                             },
                             "handlingTime": {
                                 "@type": "QuantitativeValue",
-                            "minValue": 1,
-                            "maxValue": 2,
-                            "unitCode": "DAY"
+                                "minValue": 1,
+                                "maxValue": 2,
+                                "unitCode": "DAY"
                             },
                             "transitTime": {
                                 "@type": "QuantitativeValue",
-                            "minValue": 1,
-                            "maxValue": 3,
-                            "unitCode": "DAY"
+                                "minValue": 1,
+                                "maxValue": 3,
+                                "unitCode": "DAY"
                             }
                         }
                     }
-                })
+                }
+            })
 
             // Add aggregate rating if available
             if (product.rating) {
